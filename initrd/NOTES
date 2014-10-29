@@ -1,0 +1,3 @@
+Change CONFIG_PREFIX in CONFIG_WORKING before compiling. 
+
+To compile, simply run make.

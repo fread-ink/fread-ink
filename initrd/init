@@ -1,0 +1,8 @@
+#!/bin/busybox sh
+
+echo "== Booting Fread =="
+
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
+exec /bin/sh
