@@ -1,3 +1,20 @@
+# Notes about open source
+
+There are some binary blobs in the original linux-2.6.31 amazon release in:
+
+```
+linux-2.6.31/firmware
+```
+
+A few of these end up in:
+
+```
+linux-2.6.31/tar-install/lib/firmware/imx
+```
+
+and becomes part of the final linux-2.6.31-rt11-lab126.tar.gz file, and I assume also in the uImage (should check).
+  
+Looking at these in a hex editor they look very odd. Possibly they are monochrome images (they seem to be composed mostly of the values 0, 1 and 2).
 
 # Pre-requisites
 
