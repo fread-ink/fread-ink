@@ -1,3 +1,51 @@
 Change CONFIG_PREFIX in CONFIG_WORKING before compiling. 
 
 To compile, simply run make.
+
+# Mountin the fat32 filesystem
+
+The fat32 filesystem is mounted using the /usr/sbin/mntus script which does the following:
+
+```
+losetup -o ${MNTUS_PART_OFFSET} ${MNTUS_LOOP_DEV} ${MNTUS_DEV}
+fsck.vfat -a -v ${MNTUS_LOOP_DEV}
+mount ${MNTUS_MP}
+```
+
+/etc/fstab has the line:
+
+```
+/dev/loop/0       /mnt/base-us  vfat   defaults,noatime,nodiratime,utf8,noexec,shortname=mixed              0      0
+```
+
+The mntus script takes its values from /etc/sysconfig/mntus which looks like this:
+
+```
+# /mnt/us partition and filesystem definitions
+
+_ROOT=/etc/sysconfig/root
+[ -f $_ROOT ] && . $_ROOT
+
+# device definitions
+MNTUS_DEV=/dev/${BLKROOT_DEV}p4
+MNTUS_LOOP_DEV=/dev/loop/0
+
+# filesystem definitions
+MNTUS_MP=/mnt/base-us
+
+MNTUS_LABEL="Kindle"
+
+# MNTUS_PARAMS is defined in paths  because it moved to var/local/
+```
+
+and from /var/local/system/mntus.params which looks like this:
+
+```
+# computed values
+MNTUS_PART_START=16
+MNTUS_PART_SIZE=1423352
+MNTUS_PART_OFFSET=8192
+
+# constant values
+MNTUS_FATSIZE=32
+```

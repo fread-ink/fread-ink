@@ -36,6 +36,10 @@ To see changed files, grep for "juul" in this dir.
 
 First run:
 
+  sudo aptitude install u-boot-tools
+
+If that doesn't work try this instead:
+
   sudo aptitude install uboot-mkimage
 
 Then run:
@@ -56,10 +60,10 @@ For explanation of /dev/ram0 see: https://www.kernel.org/doc/Documentation/initr
 
 Passing the exact contents of /proc/cmdline into command-line-options is the safest way to ensure that correct values are passed to the rebooting kernel.
 
-kexec \
+kexec4 \
  -l uImage \
  --type=uImage 
-kexec -e
+kexec4 -e
 
 # Compiling the fread intiial ram disk (initrd) 
 
@@ -109,3 +113,34 @@ Which cause the kindle X driver to be pulled from juul's github.
 need to create correct versions of:
 
 buildroot-2014.02/system/device_table*.txt
+
+
+# Hardware info
+
+The Kindles use the Freescale i.MX series of low-power system-on-chip micropocessors. The i.MX processors used in the Kindle 4th generation and later includes an ElectroPhoretic Display Controller (EPDC).
+
+First, second and third generation Kindles used the i.MX31 and i.MX35 processors while later versions used the i.MX50 which includes the EPDC. The paperwhite uses the i.MX 6SoloLite which has a higher performance EPDC (presumably to allow for higher resolutions).
+
+Hardware for various Kindle versions:
+
+*Original: Marvell Xscale PXA255 400 MHz, 64 MB RAM, 256 MB HD,
+*Kindle 2: Freescale i.MX31 532 MHz, 32 MB RAM, 2 GB HD,
+*Kindle 3: Freescale i.MX35 532 MHz, 128 MB RAM, 4 GB HD
+*Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX50 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
+*Kindle Paperwhite (2nd gen): Freescale i.MX50 1 GHz, 256 MB RAM, 2 GB HD
+
+https://en.wikipedia.org/wiki/I.MX
+
+http://cache.freescale.com/files/industrial/doc/white_paper/KNDLPWCS.pdf
+
+https://community.freescale.com/docs/DOC-93622
+
+# Non-Kindle devices
+
+## Nook Simple Touch (and Glowlight)
+
+*Processor: 800 MHz TI OMAP 3621
+*RAM: 256 MB
+*HD: 2 GB + microSD
+*OS: Android 2.1
+

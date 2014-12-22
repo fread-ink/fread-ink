@@ -63,7 +63,7 @@ CONFIG_LOG_BUF_SHIFT=14
 # CONFIG_RELAY is not set
 # CONFIG_NAMESPACES is not set
 CONFIG_BLK_DEV_INITRD=y
-CONFIG_INITRAMFS_SOURCE="../../initrd/initramfs.cpio"
+CONFIG_INITRAMFS_SOURCE="/home/juul/projects/kindle/initrd/initramfs.cpio"
 CONFIG_INITRAMFS_ROOT_UID=0
 CONFIG_INITRAMFS_ROOT_GID=0
 CONFIG_RD_GZIP=y
@@ -317,7 +317,7 @@ CONFIG_ALIGNMENT_TRAP=y
 #
 CONFIG_ZBOOT_ROM_TEXT=0x0
 CONFIG_ZBOOT_ROM_BSS=0x0
-CONFIG_CMDLINE="consoleblank=0 rootwait ro ip=off root=/dev/ram0 debug eink=fslepdc video=mxcepdcfb:E60,bpp=8 console=ttymxc0,115200"
+CONFIG_CMDLINE=""
 # CONFIG_XIP_KERNEL is not set
 CONFIG_KEXEC=y
 CONFIG_ATAGS_PROC=y
