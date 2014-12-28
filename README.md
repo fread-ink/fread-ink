@@ -1,3 +1,125 @@
+
+# Kindle workings
+
+## How the eips utility clears the screen:
+
+```
+open("/dev/fb0", O_RDWR)                = 3
+ioctl(3, FBIOGET_VSCREENINFO, 0xbe9c5b48) = 0
+mmap2(NULL, 480000, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, 3, 0) = 0x40127000
+ioctl(3, 0x46e1, 0)                     = 0
+close(3)                                = 0
+```
+
+It open the framebuffer in read-write mode, maps it to memory, then calls the ioctl FBIO_EINK_CLEAR_SCREEN. Not sure why the memory mapping is needed, maybe it just always does that and it's not actually needed for the clear.
+
+## Which modules the kindle loads for eink
+
+Here is the reverse module load order from the stop_eink() function from /etc/init.d/video
+
+```    
+rmmod eink_fb_shim 
+rmmod eink_fb_hal_broads 
+rmmod eink_fb_hal_fslepdc
+rmmod eink_fb_hal_emu
+rmmod mxc_epdc_fb
+rmmod eink_fb_hal
+rmmod eink_fb_waveform
+rmmod emucolor_fb
+```         
+
+The module loading proceeds through load_eink_fb_1st() then load_controller() then load_eink_fb_2nd():
+
+```
+modprobe eink_fb_waveform
+modprobe eink_fb_hal
+modprobe mxc_epdc_fb dont_register_fb=1
+modprobe eink_fb_hal_fslepdc bootstrap=0 waveform_to_use=/path/to/06_05_00dc_3c_156231_05_58_000010a2_85_07.wbf
+modprobe eink_fb_shim
+```
+
+Runnning the above on the original kindle system after running:
+
+```
+/etc/init.d/video stop_all
+```
+
+results in a working display, which can be tested with:
+
+```
+eips lollerskater
+```
+
+Even omititng the waveform_to_use parameter still results in a working system.
+
+It seems like the broads (broadsheet) and fslepdc (FreeScaLe Electronic Paper Display Controller) referred to in /etc/init.d/display are almost certainly different e-ink controllers, with the emu option being emulation (for when no e-ink controller/display is available).
+
+# Cross compiling manually with buildroot
+
+After compiling buildroot the cross compile environment will be in:
+
+```
+buildroot_dir/output/host/
+```
+
+
+
+
+# Cross compiling programs
+
+Note that your cross compiler will need to be using the same version of libc (and any other libraries) as is present on the kindle so the process outlined here won't really work :(
+
+Here is an example of how you can cross-compile code for you kindle. 
+
+sudo aptitude install gcc-arm-linux-gnueabi g++-arm-linux-gnueabi  cpp-arm-linux-gnueabi binutils-arm-linux-gnueabi pkg-config-arm-linux-gnueabi
+
+Here we are cross compiling strace, so better download and extract it:
+
+```
+wget http://downloads.sourceforge.net/project/strace/strace/4.9/strace-4.9.tar.xz
+tar xvJf strace-4.9.tar.xz
+```
+
+Make some dirs we'll need for building
+mkdir strace-build
+mkdir strace-final
+```
+
+Now set some environment variables using the script included with fread (this script assumes your system is 64 bit x86):
+
+```
+. utilities/cross_compile_env.sh
+```
+
+Configure build and install strace:
+
+```
+cd strace-build
+../strace-4.9/configure --prefix=/home/juul/projects/fread.ink/strace-final --host=$TARGETMACH
+make
+make install
+```
+
+You will find the resulting binaries in strace-final/bin and you can simply copy the strace binary to the kindle.
+
+# kexec
+
+A binary kexec for kindle 4 is included in kernel/kexec_kindle_4 and I recommend that you use it. Compiling a kexec that will work on kindle 4 is annoying since it requires a cross-compilation toolchain with an old libc and old kernel headers.
+
+# Investigating the original kindle system
+
+## ldd
+
+There is no ldd on the kindle. You can instead use this script utilities/fake_ldd.sh on your host system:
+
+## strace
+
+A version of strace compiled for kindle 4 is available here utilities/strace_kindle_4
+
+## strings
+
+The strings utility is already present on the kindle.
+
 # Notes about open source
 
 There are some binary blobs in the original linux-2.6.31 amazon release in:
@@ -134,6 +256,8 @@ https://en.wikipedia.org/wiki/I.MX
 http://cache.freescale.com/files/industrial/doc/white_paper/KNDLPWCS.pdf
 
 https://community.freescale.com/docs/DOC-93622
+
+## Kindle 4 NT
 
 # Non-Kindle devices
 
