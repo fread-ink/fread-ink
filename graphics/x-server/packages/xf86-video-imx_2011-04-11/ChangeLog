@@ -1,0 +1,7 @@
+commit 8a554fdffedd45d6faf50b3e4c9464301530a4a5
+Author: Rob Herring <r.herring@freescale.com>
+Date:   Tue Jun 2 12:31:54 2009 +0800
+
+    Initial commit for i.MX X server video driver
+
+    Supports EXA using Z160 and XVideo using IPU

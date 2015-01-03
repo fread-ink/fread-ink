@@ -1,0 +1,17 @@
+prefix=/home/juul/projects/fread.ink/fread-ink/graphics/x-server/output
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+sysconfdir=/etc
+localstatedir=${prefix}/var
+PACKAGE=fontconfig
+confdir=@baseconfigdir@
+cachedir=/var/cache/fontconfig
+
+Name: Fontconfig
+Description: Font configuration and customization library
+Version: 2.11.0
+Requires:  freetype2
+Requires.private:  expat
+Libs: -L${libdir} -lfontconfig
+
