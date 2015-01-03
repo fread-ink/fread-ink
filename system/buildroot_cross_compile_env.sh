@@ -2,7 +2,7 @@
 
 
 export PATH=`readlink -f ./buildroot-2014.02/output/host/usr/bin`:$PATH
-export TARGETMACH=arm-buildroot-linux-uclibcgnueabi
+export TARGETMACH=arm-buildroot-linux-gnueabi
 export BUILDMACH=x86_64-pc-linux-gnu
 export CROSS=arm-linux
 export CC=${CROSS}-gcc
