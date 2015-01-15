@@ -1,0 +1,12 @@
+[settings]
+default-encoding=ISO-8859-1
+enable-site-specific-quirks=true
+last-window-width=803
+last-window-height=451
+homepage=file:///usr/share/ubuntu-artwork/home/index.html
+location-entry-search=https://duckduckgo.com/?q=%s
+enable-spell-checking=false
+enable-html5-database=true
+user-agent=Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-us) AppleWebKit/537+ (KHTML, like Gecko) Version/5.0 Safari/537.6+ Midori/0.4
+clear-private-data=145
+clear-data=page-icons,formhistory,web-cookies,flash-cookies,html5-databases,web-cache,offline-appcache,

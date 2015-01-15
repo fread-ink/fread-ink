@@ -1,4 +1,94 @@
 
+# Jailbreaking
+
+## Jailbreaking Kindle Voyage
+
+You need a serial console for this jailbreak. On the kindle, go to settings, then go to "about kindle" to get your kindle's serial number. Use [NiLuJe's version of KindleTool](https://github.com/NiLuJe/KindleTool/) to calculate the recovery root password. The normal root password won't work on the kindle voyage. 
+
+Download KindleTool:
+
+```
+git clone https://github.com/NiLuJe/KindleTool.git
+```
+
+To compile KindleTool first install dependencies:
+
+```
+sudo aptitude install libgmp-dev libgmp3-dev nettle-dev build-essential
+```
+
+Then compile:
+
+```
+cd KindleTool
+make
+```
+
+Run KindleTool:
+
+```
+./KindleTool/Release/kindletool CAFEC0DEF00D00
+
+```
+
+Save the diagnostics password. The other password won't work.
+
+On the serial console, hit enter during the uboot prompt at bootup. Then run the printenv command and look for a line like:
+
+```
+bootcmd_diags=bootm 0xE41000
+```
+
+Run the part after the '=' as a command:
+
+```
+bootm 0xE41000
+```
+
+Wait for the kindle to boot into diagnostics mode, then touch the "Exit or reboot" option, and then the "exit to login shell" option. Wait for a few seconds, then hit enter on the serial console and you should get a login shell.
+
+Now log in as root using the diagnostics password you got from KindleTool.
+
+Mount the first root partition:
+
+```
+mkdir /tmp/root
+mount /dev/mmcblk0p1 /tmp/root
+```
+
+On your own computer, generate a password hash:
+
+```
+mkpasswd --method=md5 mypassword
+```
+
+On the kindle, edit the shadow file:
+
+```
+vi /tmp/root/etc/shadow
+```
+
+Replace exclamation mark on the first line:
+
+```
+root:!:10933:0:99999:7:::
+```
+
+With the output from mkpasswd:
+
+```
+root:$1$Fmgi9feV$J268xLEjfPm6w6puduyNh/:10933:0:99999:7:::
+```
+
+Save the file, then unmount the root partition and reboot:
+
+```
+umount /tmp/root
+reboot
+```
+
+Now you should be able to log in with the root password you gave to mkpasswd.
+
 
 # Kindle workings
 
@@ -250,7 +340,8 @@ Hardware for various Kindle versions:
 *Kindle 2: Freescale i.MX31 532 MHz, 32 MB RAM, 2 GB HD,
 *Kindle 3: Freescale i.MX35 532 MHz, 128 MB RAM, 4 GB HD
 *Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX50 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
-*Kindle Paperwhite (2nd gen): Freescale i.MX50 1 GHz, 256 MB RAM, 2 GB HD
+*Kindle Paperwhite (2nd gen): Freescale i.MX50 (really?) 1 GHz, 256 MB RAM, 2 GB HD
+*Kindle Voyage: Freescale i.MX6, 512 MB RAM, 4GB HD
 
 https://en.wikipedia.org/wiki/I.MX
 
