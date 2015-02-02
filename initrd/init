@@ -14,9 +14,9 @@ echo "== Booting Fread =="
 /bin/mount -t vfat -o defaults,noatime,utf8,noexec,shortname=mixed /dev/loop/0 /mnt/us
 
 # Experimental fread rootfs automount
-/sbin/losetup /dev/loop/1 /mnt/us/freadfs.ext2
+/sbin/losetup /dev/loop/1 /mnt/us/freadfs2.ext4
 /bin/mkdir -p /mnt/fread
-/bin/mount -t ext2 -o defaults,noatime /dev/loop/1 /mnt/fread
+/bin/mount -t ext4       -o defaults,noatime /dev/loop/1 /mnt/fread
 
 # Experimental fread pivot and change root
 #/bin/mkdir -p /mnt/fread/initrd
@@ -38,9 +38,16 @@ modprobe eink_fb_hal_fslepdc bootstrap=0
 
 # start X
 X -config /etc/X.fbdev.conf &
+
+# or try:
+X -config /etc/Xorg.conf -logfile /tmp/Xorg.log -modulepath /lib/xorg/mod
+ules &
+
+
 # problems and solutions
-# https://lists.debian.org/debian-arm/2009/02/msg00065.html
-# http://www.mail-archive.com/xorg@lists.freedesktop.org/msg04115.html
+
+* https://lists.debian.org/debian-arm/2009/02/msg00065.html
+* http://www.mail-archive.com/xorg@lists.freedesktop.org/msg04115.html
 
 
 exec /bin/sh

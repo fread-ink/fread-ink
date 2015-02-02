@@ -1,3 +1,4 @@
+CONFIG_WORKING_PAPERWHITE is for compiling the kernel included with the paperwhite 1st gen kernel. It has a slightly newer epdc driver but is the same kernel version as the kindle 4 NT kernel.
 
 
 # GOT HERE
