@@ -1,4 +1,8 @@
 
+
+WARNING: This is a big mess right now and graphics are not yet fully working. You should come back later if you're expecting this to be working or even documented, but yes: This is indeed a work-in-progress attempt at a FOSS operating system for e-ink devices.
+
+
 # Jailbreaking
 
 ## Jailbreaking Kindle Voyage
