@@ -2,6 +2,22 @@
 
 WARNING: This is a big mess right now and graphics are not yet fully working. You should come back later if you're expecting this to be working or even documented, but yes: This is indeed a work-in-progress attempt at a FOSS operating system for e-ink devices.
 
+# TODO
+
+The awesome window manager has lots of "#ifdef LAB126" statements so we need to ensure that LAB126 is set when compiling. Otherwise we're not getting the XDamage stuff.
+
+When running make for buildroot, awesome cmake isn't finding lua. This is despite the fact that the following command _does_ detect lua:
+
+```
+cd output/build/awesome-*
+rm CMakeCache.txt
+rm .stamp_configured
+cmake -DCMAKE_TOOLCHAIN_FILE=../../host/usr/share/buildroot/toolchainfile.cmake .
+```
+
+The minimum kernel version needed for the latest buildroot is 2.6.32 but the kindle kernel we've been using is 2.6.31. Currently I'm trying a dirty hack where I'm just setting the kernel version to 2.6.32 but using the 2.6.31 kernel.
+
+I had to drop imx-lib since it was depending on linux kernel headers that were not present. Possibly imx-lib is only for i.mx6?
 
 # Jailbreaking
 
@@ -282,7 +298,7 @@ kexec4 \
  --type=uImage 
 kexec4 -e
 
-# Compiling the fread intiial ram disk (initrd) 
+# Compiling the fread initial ram disk (initrd) 
 
 The initial ram disk is actually just minimal busybox system contained in a .cpio file which bootstraps the file system containing the full system using the init script contained in /init in the cpio filesystem.
 
@@ -326,7 +342,7 @@ BR2_PACKAGE_OVERRIDE_FILE="$(TOPDIR)/local.mk"
 Copy the awesome buildroot files from this repo:
 
 ```
-cp -a fread-ink/graphics/libxdg-basedir  buildroot-2015.05/package/
+cp -a fread-ink/system/buildroot_packages/libxdg-basedir  buildroot-2015.05/package/
 ```
 
 Then add the following line to buildroot-2015.05/package/Config.in
@@ -350,7 +366,7 @@ Exit menuconfig saving the configuration.
 Copy the awesome buildroot files from this repo:
 
 ```
-cp -a fread-ink/graphics/awesome  buildroot-2015.05/package/
+cp -a fread-ink/system/buildroot_packages/awesome  buildroot-2015.05/package/
 ```
 
 Then add the following line to buildroot-2015.05/package/Config.in
@@ -369,6 +385,19 @@ Then run "make menuconfig", enable the "awesome" option in "Target packages"--> 
 
 Exit menuconfig saving the configuration.
 
+## Upgrading the version of startup-notification
+
+awesome needs startup-notification 0.10 or later but buildroot is using 0.9 so edit the file:
+
+```
+buildroot-2015.05/package/startup-notification/startup-notification.mk
+```
+
+Setting the version to 0.12 (since 0.10 and 0.11 are broken):
+
+```
+STARTUP_NOTIFICATION_VERSION = 0.12
+```
 
 ## Settting kernel paths
 

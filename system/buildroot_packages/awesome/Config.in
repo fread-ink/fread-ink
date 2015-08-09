@@ -1,0 +1,23 @@
+config BR2_PACKAGE_AWESOME
+	depends on BR2_PACKAGE_XORG7
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_PACKAGE_GLIBC
+	select BR2_PACKAGE_IMLIB2
+	select BR2_PACKAGE_IMLIB2_JPEG
+	select BR2_PACKAGE_IMLIB2_PNG
+	select BR2_PACKAGE_IMLIB2_GIF
+	select BR2_PACKAGE_IMLIB2_TIFF
+	select BR2_PACKAGE_XCB_PROTO
+	select BR2_PACKAGE_CAIRO
+	select BR2_PACKAGE_PANGO
+	select BR2_PACKAGE_XCB_UTIL
+	select BR2_PACKAGE_XCB_UTIL_IMAGE
+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+	select BR2_PACKAGE_XCB_UTIL_WM
+	select BR2_PACKAGE_LIBXDG_BASEDIR
+	select BR2_PACKAGE_LUA
+	bool "awesome"
+	help
+	  awesome is an awesome window manager
+	  This is the version released by Amazon for Kindle
+	  It adds XDamage support to the awesome lua API
