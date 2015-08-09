@@ -1,0 +1,31 @@
+    glib-2.0
+    cairo
+    x11
+    pango>=1.19.3
+    pangocairo>=1.19.3
+    xcb-damage
+    xcb-randr
+    xcb-xtest
+    xcb-xinerama
+    xcb-shape
+    xcb-event>=0.3.6
+    xcb-aux>=0.3.0
+    xcb-atom>=0.3.0
+    xcb-keysyms>=0.3.4
+    xcb-icccm>=0.3.6
+    xcb-image>=0.3.0
+    xcb-property>=0.3.0
+    cairo-xcb
+    libstartup-notification-1.0>=0.10
+    xproto>=7.0.15
+    imlib2
+    libxdg-basedir>=1.0.0)
+
+need to add to buildroot config:
+
+xcb-util
+xcb-util-image
+startup_notification
+imlib2
+
+and libxdg-basedir does not seem to be part of buildroot :(

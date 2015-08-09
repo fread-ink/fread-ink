@@ -1,0 +1,7 @@
+config BR2_PACKAGE_LIBXDG_BASEDIR
+	bool "libxdg-basedir"
+	help
+	  libxdg-basedir is an implementation of the 
+ 	  XDG Base Directory Specification    
+ 
+	  http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html

@@ -297,11 +297,17 @@ exec /bin/sh
 
 The fread operating system is compiled using buildroot with the kernel headers from the fread kernel and the X driver added in.
 
+Get the latest buildroot from http://buildroot.uclibc.org/download.html
+
+I used buildroot-2015.05
+
+Use make menuconfig and load the buildroot config from this repo.
+
 ## Using custom kernel source
 
 In order to use a custom linux kernel source (instead of downloading the default linux kernel) the following settings were needed:
 
-Added buildroot-2014.02/local.mk with the line:
+Added buildroot-2015.05/local.mk with the line:
 
 LINUX_OVERRIDE_SRCDIR = /home/juul/projects/kindle/toolchain/linux-2.6.31
 
@@ -309,23 +315,82 @@ and in menuconfig set:
 
 BR2_PACKAGE_OVERRIDE_FILE="$(TOPDIR)/local.mk"
 
-## Adding the kindle X driver
+## Adding the libxdg-basedir package
 
-To package/x11r7/Config.in added the line:
+Copy the awesome buildroot files from this repo:
 
-	source package/x11r7/xdriver_xf86-video-imx/Config.in
+```
+cp -a fread-ink/graphics/libxdg-basedir  buildroot-2015.05/package/
+```
 
-Added the dir and contents:
+Then add the following line to buildroot-2015.05/package/Config.in
 
-  package/x11r7/xdriver_xf86-video-imx
+```
+source "package/libxdg-basedir/Config.in"
+```
 
-Which cause the kindle X driver to be pulled from juul's github.
+Add it right after the line:
+
+```
+source "package/tzdata/Config.in"
+```
+
+Then run "make menuconfig", enable the libxdg-basedir option in "Target packages"-->"Libraries"-->"Other" at the bottom of the list.
+
+Exit menuconfig saving the configuration.
+
+## Adding the awesome window manager
+
+Copy the awesome buildroot files from this repo:
+
+```
+cp -a fread-ink/graphics/awesome  buildroot-2015.05/package/
+```
+
+Then add the following line to buildroot-2015.05/package/Config.in
+
+```
+source "package/awesome/Config.in"
+```
+
+Add it right after the line:
+    
+```
+comment "X window managers"
+```
+
+Then run "make menuconfig", enable the "awesome" option in "Target packages"--> TODO
+
+Exit menuconfig saving the configuration.
+
+
+## Settting kernel paths
+
+Start menuconfig:
+
+```
+make menuconfig
+```
+
+Set "Kernel" --> "Kernel version" to "Local directory" then set the option below to the absolute path where you have you compiled kindle kernel. E.g:
+
+```
+/home/juul/projects/kindle/toolchain/linux-2.6.31
+```
+
+Set "Kernel" --> "Kernel configuration" to "Using custom (def)config file" then set the option below to the absolute path of the kernel config, e.g:
+
+
+```
+/home/juul/projects/fread-ink/kernel/CONFIG
+```
+
 
 ## TODO
 
 need to create correct versions of:
 
-buildroot-2014.02/system/device_table*.txt
+buildroot-2015.05/system/device_table*.txt
 
 
 # Hardware info
