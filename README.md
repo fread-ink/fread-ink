@@ -299,6 +299,8 @@ exec /bin/sh
 
 # Compiling the fread operating system
 
+TODO: The kernel headers used are 2.6.32 but the kindle kernel is 2.6.31 which may cause problems. glibc in the latest buildroot needs at least 2.6.32 so we should patch the kindle kernel to be version 2.6.32
+
 The fread operating system is compiled using buildroot with the kernel headers from the fread kernel and the X driver added in.
 
 Get the latest buildroot from http://buildroot.uclibc.org/download.html
