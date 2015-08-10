@@ -385,6 +385,8 @@ Then run "make menuconfig", enable the "awesome" option in "Target packages"--> 
 
 Exit menuconfig saving the configuration.
 
+
+
 ## Upgrading the version of startup-notification
 
 awesome needs startup-notification 0.10 or later but buildroot is using 0.9 so edit the file:
@@ -420,6 +422,38 @@ Set "Kernel" --> "Kernel configuration" to "Using custom (def)config file" then 
 /home/juul/projects/fread-ink/kernel/CONFIG
 ```
 
+## Compiling
+
+Simply run:
+
+```
+make
+```
+
+## Fixing webkit errors
+
+You may get some errors while compiling webkit that look like this:
+
+```
+In file included from ./Source/WTF/wtf/UnusedParam.h:24:0,
+                 from Source/JavaScriptCore/API/tests/JSNode.c:33:
+./Source/WTF/wtf/Platform.h:301:1: error: expected identifier or ‘(’ before ‘/’ token
+ // All NEON intrinsics usage can be disabled by this macro.
+```
+
+Simply edit the Platform.h file changing the problematic lines from comments like this:
+
+```
+// All NEON intrinsics usage can be disabled by this macro.
+```
+
+To comments like this:
+
+```
+/* All NEON intrinsics usage can be disabled by this macro. */
+```
+
+Then re-run make to resume compilation.
 
 ## TODO
 
