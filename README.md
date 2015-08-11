@@ -303,12 +303,12 @@ First, second and third generation Kindles used the i.MX31 and i.MX35 processors
 
 Hardware for various Kindle versions:
 
-*Original: Marvell Xscale PXA255 400 MHz, 64 MB RAM, 256 MB HD,
-*Kindle 2: Freescale i.MX31 532 MHz, 32 MB RAM, 2 GB HD,
-*Kindle 3: Freescale i.MX35 532 MHz, 128 MB RAM, 4 GB HD
-*Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX50 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
-*Kindle Paperwhite (2nd gen): Freescale i.MX50 (really?) 1 GHz, 256 MB RAM, 2 GB HD
-*Kindle Voyage: Freescale i.MX6, 512 MB RAM, 4GB HD
+* Original: Marvell Xscale PXA255 400 MHz, 64 MB RAM, 256 MB HD,
+* Kindle 2: Freescale i.MX31 532 MHz, 32 MB RAM, 2 GB HD,
+* Kindle 3: Freescale i.MX35 532 MHz, 128 MB RAM, 4 GB HD
+* Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX50 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
+* Kindle Paperwhite (2nd gen): Freescale i.MX50 (really?) 1 GHz, 256 MB RAM, 2 GB HD
+* Kindle Voyage: Freescale i.MX6, 512 MB RAM, 4GB HD
 
 https://en.wikipedia.org/wiki/I.MX
 
