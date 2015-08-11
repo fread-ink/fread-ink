@@ -322,10 +322,10 @@ https://community.freescale.com/docs/DOC-93622
 
 ## Nook Simple Touch (and Glowlight)
 
-*Processor: 800 MHz TI OMAP 3621
-*RAM: 256 MB
-*HD: 2 GB + microSD
-*OS: Android 2.1
+* Processor: 800 MHz TI OMAP 3621
+* RAM: 256 MB
+* HD: 2 GB + microSD
+* OS: Android 2.1
 
 
 # Buildroot tips
