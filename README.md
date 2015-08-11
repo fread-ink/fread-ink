@@ -522,7 +522,7 @@ eips lollerskater
 
 Even omitting the waveform_to_use parameter still results in a working system.
 
-The broads (broadsheet) and fslepdc (FreeScaLe Electronic Paper Display Controller) referred to in various places are different e-ink controllers, with the emu option being emulation (for when no e-ink controller/display is available). This is because the very first kindle had a separate e-ink controller, the Epson Broadsheet, while all other kindles use versions of the Freescale i.mx SoC containing an integrated EPDC.
+The broads (broadsheet) and fslepdc (FreeScaLe Electronic Paper Display Controller) referred to in various places are different e-ink controllers, with the emu option being emulation (for when no e-ink controller/display is available). This is because some of the early kindles had a separate e-ink controller, the Epson Broadsheet, while newer kindles use versions of the Freescale i.mx SoC containing an integrated EPDC.
 
 # Cross compiling manually with buildroot
 
