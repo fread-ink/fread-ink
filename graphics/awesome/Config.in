@@ -12,7 +12,10 @@ config BR2_PACKAGE_AWESOME
 	select BR2_PACKAGE_PANGO
 	select BR2_PACKAGE_XCB_UTIL
 	select BR2_PACKAGE_XCB_UTIL_IMAGE
+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+	select BR2_PACKAGE_XCB_UTIL_WM
 	select BR2_PACKAGE_LIBXDG_BASEDIR
+	select BR2_PACKAGE_LUA
 	bool "awesome"
 	help
 	  awesome is an awesome window manager

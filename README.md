@@ -3,7 +3,7 @@ This is a work-in-progress attempt at a free-as-in-freedom linux distribution fo
 
 WARNING: This is a big mess right now and graphics are not yet fully working. You should come back later if you're expecting something usable.
 
-This project is based on buildroot and the GPL sources released by Lab126. The operating system is called [fread](http://fread.ink) and while it will run native X apps, most apps will run as full-screen web apps. The focus is on making it super easy to write apps. Performance is less important since the refresh delay of electronic paper hides a lot of the delay. The plan is to have an app and media store called the [free store](freestore.cc) where the app store will simply be a GUI front-end to packages published via npm (and carrying a tag saying that they are fread apps). The media store will be a front-end where people can publish, rate and review any [free culture](http://freedomdefined.org/Definition) media content. The free store will only support ebooks in its first iteration and will simply use archive.org and wikimedia as the storage backend.
+This project is based on buildroot and the GPL sources released by Lab126. The operating system is called [fread](http://fread.ink) and while it will run native X apps, most apps will run as full-screen web apps. The focus is on making it super easy to write apps. Performance is less important since the refresh delay of electronic paper hides a lot of the delay and most of these devices actually have reasonably fast processors. The plan is to have an app and media store called the [free store](freestore.cc) with an app store that will simply be a GUI front-end to packages published via npm (and carrying a tag saying that they are fread apps) and a media store that will be a front-end where people can publish, rate and review any [free culture](http://freedomdefined.org/Definition) media content. The free store will only support apps and ebooks in its first iteration and will simply use npm, archive.org and wikimedia as the storage backends.
 
 I have set myself a very tentative deadline of a 0.1 alpha release for Chaos Communications Congress 2015 but I work on [several](http://peoplesopen.net/) [other](https://sudoroom.org/) [important](http://counterculturelabs.org/) [projects](http://realvegancheese.org/) + I have to actually pay rent somehow, so don't be too surprised if I don't make that deadline. You are of course welcome to help out, but I have limited time for helping new developers get up to speed right now. I hang out in #sudoroom on freenode IRC if you want to reach me (I am juul).
 
@@ -11,14 +11,14 @@ This readme is currently full of a bunch of helpful assorted notes for developer
 
 # Status
 
-The current status of the project is that I can compile and boot a working system and have been able to flip some pixels on the e-ink display by loading the appropriate kernel modules and sending ioctl commands but I do not have real graphics support. Investigating the Lab126 GPL source shows that they, at least on later Kindle devices, are using a full X server with their own fork of the awesome window manager. Their fork has been modified to extend the lua API to allow lua scripts to receive XDamage events with information about which portions of the screen need updating. It can be assumed that lua scripts are then being used to listen for XDamage events and trigger the appropriate screen updates (possibly using ioctl calls through a compiled lua module). These last parts were not included in the GPL code release from Lab126. The major challenges have been getting everything to compile since the code release was partial (even some kernel headers were missing) and many packages were fairly old. Luckily the actual epdc (electronic paper display controller) drivers were merged into buildroot recently so we don't have to maintain our own version of those anymore! Currently everything compiles on latest stable buildroot, including an updated version of the forked awesome. The next step is testing and writing the lua scripts and lua module to enable graphics updating. Then the last major steps before a 0.1 release is getting button input and wifi working (neither should post major challenges).
+The current status of the project is that I can compile and boot a working system and have been able to flip some pixels on the e-ink display by loading the appropriate kernel modules and sending ioctl commands but I do not have real graphics support. Investigating the Lab126 GPL source shows that they, at least on later Kindle devices, are using a full X server with their own fork of the awesome window manager. Their fork has been modified to extend the awesome lua API to allow lua scripts to receive XDamage events with information about which portions of the screen need updating. It can be assumed that lua scripts are then being used to listen for XDamage events and trigger the appropriate screen updates (possibly using ioctl calls through a compiled lua module). These last parts were not included in the GPL code release from Lab126. The major challenges have been getting everything to compile since the code release was partial (even some kernel headers were missing) and many packages were fairly old. Luckily the actual epdc (electronic paper display controller) drivers were merged into buildroot recently so we don't have to maintain our own version of those anymore! Currently everything compiles on latest stable buildroot, including an updated version of the forked awesome. The next step is testing and writing the lua scripts and lua module to enable graphics updating. Then the last major steps before a 0.1 release is getting button input and wifi working (neither should pose major challenges) and writing a basic web UI.
 
-In the future it would be interesting to look at the modifications Lab126 did to webkit. Their webkit is ancient and their changes seem extensive but I have not looked into them too deeply. Two things would be interesting:
+In the future it would be interesting to look at the modifications Lab126 did to webkit. Their webkit is ancient and their changes seem extensive but I have not looked into them too deeply. Two types of modifications would be interesting:
 
-* Giving developers some level of hardware access from the client side javascript (real sockets, battery status, wifi info, etc.)
-* Potentially giving developers the option of controlling screen updates on a per-html-element basis such that no updates are performed automatically.
+* Giving developers some level of hardware access from the client side javascript (real sockets, filesystem access, battery status, wifi info, etc.)
+* Giving developers the option of controlling screen updates on a per-html-element basis such that no updates are performed automatically.
 
-and having an up to date webkit seems important.
+and having an up to date webkit seems important, so someone should get the latest stable libwebkitgtk+ compiling in buildroot (the current one is from 2013).
 
 # TODO (for the developers)
 
@@ -34,7 +34,9 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../../host/usr/share/buildroot/toolchainfile.cmake 
 
 The minimum kernel version needed for the latest buildroot is 2.6.32 but the kindle kernel we've been using is 2.6.31. Currently I'm trying a dirty hack where I'm just setting the kernel version in buildroot to 2.6.32 but using the 2.6.31 kernel.
 
-I had to drop imx-lib since it was depending on linux kernel headers that were not present. Possibly imx-lib is only for i.mx6?
+I had to drop imx-lib (in buildroot menuconfig) since it was depending on linux kernel headers that were not present. Possibly imx-lib is only for i.mx6?
+
+I should turn all of the manual buildroot patch instructions in this readme into a small patchset and script that automates everything.
 
 # Pre-requisites
 
@@ -297,18 +299,19 @@ buildroot-2015.05/system/device_table*.txt
 
 # Hardware info
 
-The Kindles use the Freescale i.MX series of low-power system-on-chip micropocessors. The i.MX processors used in the Kindle 4th generation and later includes an ElectroPhoretic Display Controller (EPDC).
+The Kindles use the Freescale i.MX series of low-power system-on-chip micropocessors. The i.MX processors used in the Kindle 4th generation and later includes an ElectroPhoretic Display Controller (EPDC). Before the 4th gen the Kindles used an Epson Broadsheet EPDC.
 
-First, second and third generation Kindles used the i.MX31 and i.MX35 processors while later versions used the i.MX50 which includes the EPDC. The paperwhite uses the i.MX 6SoloLite which has a higher performance EPDC (presumably to allow for higher resolutions).
+First, second and third generation Kindles used the i.MX31 and i.MX35 processors while later versions used the i.MX508 which includes the EPDC. The paperwhite uses the i.MX6 SoloLite which has a higher performance EPDC (presumably to allow for higher resolutions).
 
 Hardware for various Kindle versions:
 
 * Original: Marvell Xscale PXA255 400 MHz, 64 MB RAM, 256 MB HD,
 * Kindle 2: Freescale i.MX31 532 MHz, 32 MB RAM, 2 GB HD,
 * Kindle 3: Freescale i.MX35 532 MHz, 128 MB RAM, 4 GB HD
-* Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX50 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
-* Kindle Paperwhite (2nd gen): Freescale i.MX50 (really?) 1 GHz, 256 MB RAM, 2 GB HD
-* Kindle Voyage: Freescale i.MX6, 512 MB RAM, 4GB HD
+* Kindle 4, 5, Touch, Paperwhite (1st gen): Freescale i.MX508 800 MHz, 256 MB RAM, 2 GB HD (4 GB for touch)
+* Kindle Paperwhite (2nd gen): Freescale i.MX6 SoloLite 1 GHz, 256 MB RAM, 2 GB HD
+* Kindle Voyage: Freescale i.MX6 SoloLite, 1 GHz, 512 MB RAM, 4GB HD
+* Kindle Paperwhite (3rd Gen): Freescale i.MX6 SoloLite, 1 GHz, 512 MB RAM, 4GB HD
 
 https://en.wikipedia.org/wiki/I.MX
 
@@ -382,7 +385,9 @@ Also look at the buildroot documentation section [Understanding when a full rebu
 
 ## Jailbreaking Kindle Voyage
 
-You need a serial console for this jailbreak. On the kindle, go to settings, then go to "about kindle" to get your kindle's serial number. Use [NiLuJe's version of KindleTool](https://github.com/NiLuJe/KindleTool/) to calculate the recovery root password. The normal root password won't work on the kindle voyage. 
+You need a serial console for this jailbreak. Getting a serial console requires opening the kindle and soldering wires. I will make a guide on how to do this at some point. Hopefully someone will make a software jailbreak for the newer kindles soon. 
+
+On the kindle, go to settings, then go to "about kindle" to get your kindle's serial number. Use [NiLuJe's version of KindleTool](https://github.com/NiLuJe/KindleTool/) to calculate the recovery root password. The normal root password won't work on the kindle voyage. 
 
 Download KindleTool:
 
